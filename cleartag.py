@@ -13,10 +13,6 @@ class ClearTag:
 	step10 = re.compile(r'<(/*)?(applet|input|form|b(?:ase|gsound|link)|embed|frame(?:set)?|i(?:frame|layer)|l(?:ayer|ink)|meta|object|s(?:cript|tyle)|title|xml)[^>]*>', re.U | re.I)
 
 	def clear_tag(self, data):
-		# data.replace('&amp;', '&amp;amp;');
-		# data.replace('&lt;', '&amp;lt;');
-		# data.replace('&gt;', '&amp;gt;');
-		
 		data = ClearTag.step1.sub(r'\1;', data)
 		data = ClearTag.step2.sub(r'\1;', data)
 		data = ClearTag.step3.sub(r'\1>', data)
@@ -28,11 +24,10 @@ class ClearTag:
 		data = ClearTag.step9.sub('', data)
 
 		old_data = data;
-		#data = ClearTag.step10.sub(lambda m: '&lt;' + m.group(2) + '&gt;' if m.group(1).count == 0 else '&lt;/' + m.group(2) + '&gt;', data)
-		data = ClearTag.step10.sub(r'\&lt\2\&gt;', data)
+		data = ClearTag.step10.sub(lambda m: '&lt;' + m.group(2) + '&gt;' if len(m.group(1)) == 0 else '&lt;/' + m.group(2) + '&gt;', data)
 
 		while(old_data != data):
 			old_data = data
-			data = ClearTag.step10.sub(lambda m: '&lt;' + m.group(2) + '&gt;' if m.group(1).count == 0 else '&lt;/' + m.group(2) + '&gt;', data)
+			data = ClearTag.step10.sub(lambda m: '&lt;' + m.group(2) + '&gt;' if len(m.group(1)) == 0 else '&lt;/' + m.group(2) + '&gt;', data)
 		
 		return data
